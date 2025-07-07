@@ -5,12 +5,11 @@ workflows:
     environment:
       xcode: latest
       node: 18
-      yarn: false
       vars:
-        XCODE_WORKSPACE: "ios/KL-Connect.xcworkspace"
-        XCODE_SCHEME: "KL-Connect"
+        XCODE_WORKSPACE: "ios/KLConnect.xcworkspace"
+        XCODE_SCHEME: "KLConnect"
     scripts:
-      - name: Install Expo CLI and project dependencies
+      - name: Install Expo CLI and dependencies
         script: |
           npm install -g expo-cli
           npm install
@@ -28,11 +27,11 @@ workflows:
             -scheme "$XCODE_SCHEME" \
             -sdk iphoneos \
             -configuration Release \
-            -archivePath $CM_BUILD_DIR/KL-Connect.xcarchive
+            -archivePath $CM_BUILD_DIR/KLConnect.xcarchive
       - name: Export .ipa file
         script: |
           xcodebuild -exportArchive \
-            -archivePath $CM_BUILD_DIR/KL-Connect.xcarchive \
+            -archivePath $CM_BUILD_DIR/KLConnect.xcarchive \
             -exportOptionsPlist ios/exportOptions.plist \
             -exportPath $CM_BUILD_DIR/build
     artifacts:
@@ -40,4 +39,4 @@ workflows:
     publishing:
       email:
         recipients:
-          - your_email@example.com
+          - avinashdola0@gmail.com
