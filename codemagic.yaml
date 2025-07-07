@@ -3,10 +3,6 @@ workflows:
     name: iOS IPA Build for KL-Connect
     max_build_duration: 60
     environment:
-      ios_signing:
-        distribution_type: development
-        bundle_identifier: "com.avinash.klconnect"
-        apple_id: "avinashdola0@gmail.com"
       xcode: latest
       vars:
         XCODE_WORKSPACE: "ios/KL-Connect.xcworkspace"
@@ -34,7 +30,7 @@ workflows:
             -exportOptionsPlist ios/exportOptions.plist \
             -exportPath $CM_BUILD_DIR/build
     artifacts:
-      - build//*.ipa
+      - build/**/*.ipa
     publishing:
       email:
         recipients:
