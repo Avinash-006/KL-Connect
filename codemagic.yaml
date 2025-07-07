@@ -1,0 +1,32 @@
+workflows:
+  ios-expo-app:
+    name: iOS Expo Build
+    environment:
+      vars:
+        EXPO_TOKEN: LIDkdQn1aBLFq2mI93KeQohgjUyhyqhRP-bwO5K9
+      node: latest
+      xcode: latest
+    triggering:
+      events:
+        - push
+        - tag
+      branch_patterns:
+        - pattern: 'main'
+          include: true
+    scripts:
+      - name: Install dependencies
+        script: |
+          npm install -g expo-cli eas-cli
+          npm ci
+      - name: Log into Expo
+        script: |
+          eas whoami || eas login --token $EXPO_TOKEN
+      - name: Configure Expo build
+        script: |
+          eas build:configure --platform ios
+      - name: Build iOS app with EAS
+        script: |
+          eas build --platform ios --non-interactive --profile production
+    artifacts:
+      - build/**/outputs/**/*.ipa
+      - eas-build/build-*.tar.gz
