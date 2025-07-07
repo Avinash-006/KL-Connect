@@ -1,32 +1,41 @@
 workflows:
-  ios-expo-app:
-    name: iOS Expo Build
+  ios-ipa-build:
+    name: iOS IPA Build (Expo Ejected)
+    max_build_duration: 60
     environment:
-      vars:
-        EXPO_TOKEN: LIDkdQn1aBLFq2mI93KeQohgjUyhyqhRP-bwO5K9
-      node: latest
+      ios_signing:
+        distribution_type: development
+        bundle_identifier: "com.avinash.yourapp"
+        apple_id: "your_apple_id@example.com"
       xcode: latest
-    triggering:
-      events:
-        - push
-        - tag
-      branch_patterns:
-        - pattern: 'main'
-          include: true
+      vars:
+        XCODE_WORKSPACE: "ios/YourApp.xcworkspace"
+        XCODE_SCHEME: "YourApp"
     scripts:
-      - name: Install dependencies
+      - name: Install Node modules
         script: |
-          npm install -g expo-cli eas-cli
-          npm ci
-      - name: Log into Expo
+          npm install
+      - name: Install CocoaPods dependencies
         script: |
-          eas whoami || eas login --token $EXPO_TOKEN
-      - name: Configure Expo build
+          cd ios
+          pod install
+      - name: Build .ipa archive
         script: |
-          eas build:configure --platform ios
-      - name: Build iOS app with EAS
+          xcodebuild archive \
+            -workspace "$XCODE_WORKSPACE" \
+            -scheme "$XCODE_SCHEME" \
+            -sdk iphoneos \
+            -configuration Release \
+            -archivePath $CM_BUILD_DIR/YourApp.xcarchive
+      - name: Export .ipa
         script: |
-          eas build --platform ios --non-interactive --profile production
+          xcodebuild -exportArchive \
+            -archivePath $CM_BUILD_DIR/YourApp.xcarchive \
+            -exportOptionsPlist ios/exportOptions.plist \
+            -exportPath $CM_BUILD_DIR/build
     artifacts:
-      - build/**/outputs/**/*.ipa
-      - eas-build/build-*.tar.gz
+      - build//*.ipa
+    publishing:
+      email:
+        recipients:
+          - your_email@example.com
