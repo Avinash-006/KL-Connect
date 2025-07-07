@@ -5,8 +5,8 @@ workflows:
     environment:
       ios_signing:
         distribution_type: development
-        bundle_identifier: "com.avinash.yourapp"
-        apple_id: "your_apple_id@example.com"
+        bundle_identifier: "com.avinash.KL-Connect"
+        apple_id: "avinashdola0@gmail.com"
       xcode: latest
       vars:
         XCODE_WORKSPACE: "ios/YourApp.xcworkspace"
