@@ -4,13 +4,19 @@ workflows:
     max_build_duration: 60
     environment:
       xcode: latest
+      node: 18
+      yarn: false
       vars:
         XCODE_WORKSPACE: "ios/KL-Connect.xcworkspace"
         XCODE_SCHEME: "KL-Connect"
     scripts:
-      - name: Install dependencies
+      - name: Install Expo CLI and project dependencies
         script: |
+          npm install -g expo-cli
           npm install
+      - name: Prebuild native iOS project
+        script: |
+          npx expo prebuild --platform ios --clean
       - name: Install CocoaPods dependencies
         script: |
           cd ios
