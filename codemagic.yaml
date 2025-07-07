@@ -1,18 +1,18 @@
 workflows:
   ios-ipa-build:
-    name: iOS IPA Build (Expo Ejected)
+    name: iOS IPA Build for KL-Connect
     max_build_duration: 60
     environment:
       ios_signing:
         distribution_type: development
-        bundle_identifier: "com.avinash.KL-Connect"
+        bundle_identifier: "com.avinash.klconnect"
         apple_id: "avinashdola0@gmail.com"
       xcode: latest
       vars:
-        XCODE_WORKSPACE: "ios/YourApp.xcworkspace"
-        XCODE_SCHEME: "YourApp"
+        XCODE_WORKSPACE: "ios/KL-Connect.xcworkspace"
+        XCODE_SCHEME: "KL-Connect"
     scripts:
-      - name: Install Node modules
+      - name: Install dependencies
         script: |
           npm install
       - name: Install CocoaPods dependencies
@@ -26,11 +26,11 @@ workflows:
             -scheme "$XCODE_SCHEME" \
             -sdk iphoneos \
             -configuration Release \
-            -archivePath $CM_BUILD_DIR/YourApp.xcarchive
-      - name: Export .ipa
+            -archivePath $CM_BUILD_DIR/KL-Connect.xcarchive
+      - name: Export .ipa file
         script: |
           xcodebuild -exportArchive \
-            -archivePath $CM_BUILD_DIR/YourApp.xcarchive \
+            -archivePath $CM_BUILD_DIR/KL-Connect.xcarchive \
             -exportOptionsPlist ios/exportOptions.plist \
             -exportPath $CM_BUILD_DIR/build
     artifacts:
